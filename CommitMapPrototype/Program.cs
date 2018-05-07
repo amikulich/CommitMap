@@ -19,7 +19,8 @@ namespace CommitMapPrototype
             var documentsAffected = solution.Projects
                 .SelectMany(p => p.Documents.Where(doc => modifiedDocumentsNames.Contains(doc.Name))); 
 
-            var usages = _semanticAnalyzer.FindAllCallers(documentsAffected, solution);
+            var usages = _semanticAnalyzer.FindAllCallers(documentsAffected, solution).Result;
+
         }
     }
 }

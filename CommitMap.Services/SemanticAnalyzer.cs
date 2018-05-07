@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.FindSymbols;
 
@@ -22,28 +23,29 @@ namespace CommitMap.Services
             {
                 var semanticModel = document.GetSemanticModelAsync().Result;
 
-                foreach (var item in semanticModel.SyntaxTree.GetRoot().DescendantNodes())
+                foreach (var item in semanticModel.SyntaxTree.GetRoot().DescendantNodes().OfType<MethodDeclarationSyntax>())
                 {
-                    var symbol = semanticModel.GetSymbolInfo(item);
+                    var symbol = semanticModel.GetDeclaredSymbol(item);
 
-                    if (symbol.Symbol != null)
+                    if (symbol != null)
                     {
-                        callers.AddRange(await FindCallersRecursively(symbol.Symbol, solution).ConfigureAwait(false));
+                        var newCallers = FindCallersRecursively(symbol, solution).Result;
+                        callers.AddRange(newCallers);
                     }
                 }
             }
 
-            return callers.ToArray();
+            return callers.Distinct().ToArray();
         }
 
         private async Task<IEnumerable<SymbolCallerInfo>> FindCallersRecursively(ISymbol symbol, Solution solution)
         {
             var callers = (SymbolFinder.FindCallersAsync(symbol, solution).Result).ToList();
 
-            IEnumerable<SymbolCallerInfo> nestedCallers = new List<SymbolCallerInfo>();
+            var nestedCallers = new List<SymbolCallerInfo>();
             foreach (var symbolCallerInfo in callers)
             {
-                nestedCallers = await FindCallersRecursively(symbolCallerInfo.CallingSymbol, solution);
+                nestedCallers.AddRange(FindCallersRecursively(symbolCallerInfo.CallingSymbol, solution).Result);
             }
 
             callers.AddRange(nestedCallers);
@@ -52,3 +54,4 @@ namespace CommitMap.Services
         }
     }
 }
+

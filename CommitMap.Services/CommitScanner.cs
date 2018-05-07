@@ -11,7 +11,7 @@
         {
             return new string[]
             {
-                "GameMath.cs",
+                "ClockNumberIntegrationService.cs",
             };
         }
     }

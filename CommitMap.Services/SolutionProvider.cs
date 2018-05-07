@@ -15,7 +15,7 @@ namespace CommitMap.Services
         public async Task<Solution> GetSolution()
         {
             var workspace = MSBuildWorkspace.Create();
-            return await workspace.OpenSolutionAsync("C:/Users/Dell/Documents/Visual Studio 2015/Projects/SharpMind/SharpMind.sln");
+            return await workspace.OpenSolutionAsync("C:\\Videology\\DSP-UI\\DSP\\Code\\DSP\\DSP.sln");
         }
     }
 }
