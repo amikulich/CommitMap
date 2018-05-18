@@ -29,8 +29,7 @@ namespace CommitMap.Services
 
                     if (symbol != null)
                     {
-                        var newCallers = FindCallersRecursively(symbol, solution).Result;
-                        callers.AddRange(newCallers);
+                        callers.AddRange(await FindCallersRecursively(symbol, solution).ConfigureAwait(false));
                     }
                 }
             }

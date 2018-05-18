@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.MSBuild;
@@ -15,7 +16,14 @@ namespace CommitMap.Services
         public async Task<Solution> GetSolution()
         {
             var workspace = MSBuildWorkspace.Create();
-            return await workspace.OpenSolutionAsync("C:\\Videology\\DSP-UI\\DSP\\Code\\DSP\\DSP.sln");
+
+            workspace.WorkspaceFailed += (sender, args) =>
+            {
+                Console.WriteLine(args.Diagnostic.Message);
+                Console.WriteLine("-----------------------");
+            };
+
+            return await workspace.OpenSolutionAsync("c:\\temp\\TestSol\\TestSol.sln");
         }
     }
 }
