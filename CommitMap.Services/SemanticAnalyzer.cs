@@ -23,13 +23,15 @@ namespace CommitMap.Services
             {
                 var semanticModel = document.GetSemanticModelAsync().Result;
 
-                foreach (var item in semanticModel.SyntaxTree.GetRoot().DescendantNodes().OfType<MethodDeclarationSyntax>())
+                foreach (var item in semanticModel.SyntaxTree.GetRoot().DescendantNodes())
                 {
-                    var symbol = semanticModel.GetDeclaredSymbol(item);
-
-                    if (symbol != null)
+                    switch (item)
                     {
-                        callers.AddRange(await FindCallersRecursively(symbol, solution).ConfigureAwait(false));
+                        case ConstructorDeclarationSyntax ctor:
+                        case MethodDeclarationSyntax method:
+                        case PropertyDeclarationSyntax property:
+                            callers.AddRange(await FindCallersRecursively(semanticModel.GetDeclaredSymbol(item), solution)); 
+                            break;
                     }
                 }
             }
@@ -39,7 +41,7 @@ namespace CommitMap.Services
 
         private async Task<IEnumerable<SymbolCallerInfo>> FindCallersRecursively(ISymbol symbol, Solution solution)
         {
-            var callers = (SymbolFinder.FindCallersAsync(symbol, solution).Result).ToList();
+            var callers = (await SymbolFinder.FindCallersAsync(symbol, solution)).ToList();
 
             var nestedCallers = new List<SymbolCallerInfo>();
             foreach (var symbolCallerInfo in callers)

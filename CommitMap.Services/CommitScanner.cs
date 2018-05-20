@@ -11,7 +11,7 @@
         {
             return new string[]
             {
-                "Service1.cs",
+                "SomeDto.cs",
             };
         }
     }

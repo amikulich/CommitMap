@@ -1,5 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using CommitMap.Services;
+using Microsoft.CodeAnalysis.FindSymbols;
 
 namespace CommitMapPrototype
 {
@@ -21,6 +24,13 @@ namespace CommitMapPrototype
 
             var usages = _semanticAnalyzer.FindAllCallers(documentsAffected, solution).Result;
 
+            var endPoints = usages.Where(u => u.CallingSymbol.ContainingType.Name.EndsWith("Controller"));
+
+            Console.WriteLine("Results:");
+            foreach (var endPoint in endPoints)
+            {
+                Console.WriteLine(endPoint.CallingSymbol);
+            }
         }
     }
 }
