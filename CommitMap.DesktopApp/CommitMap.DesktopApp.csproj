@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=4.8.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.4.8.1\lib\net45\Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeAnalysis, Version=2.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeAnalysis.Common.2.8.0\lib\netstandard1.3\Microsoft.CodeAnalysis.dll</HintPath>
     </Reference>
@@ -168,6 +171,10 @@
     <ProjectReference Include="..\CommitMap.DataAccess\CommitMap.DataAccess.csproj">
       <Project>{0436d8e8-4b62-4fb8-86ab-d410be2be9ac}</Project>
       <Name>CommitMap.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CommitMap.DI\CommitMap.DI.csproj">
+      <Project>{094EBFDF-3083-448F-8E9D-1F8BF6A71F48}</Project>
+      <Name>CommitMap.DI</Name>
     </ProjectReference>
     <ProjectReference Include="..\CommitMap.Services\CommitMap.Services.csproj">
       <Project>{6d41c1af-8042-4a94-bace-21cb1572f16d}</Project>

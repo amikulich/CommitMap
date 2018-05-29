@@ -4,23 +4,22 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-using CommitMap.Services.Changes;
 using CommitMap.Services.Changes.Bitbucket;
 
 using Newtonsoft.Json;
 
 namespace CommitMap.DataAccess
 {
-    public class BitBucketApiClient : IBitbucketApiClient
+    public class BitbucketApiClient : IBitbucketApiClient
     {
         private const string AuthorizationPrefix = "Basic";
 
         private readonly HttpClient httpClient = new HttpClient();
 
         /// <summary>
-        /// Initializes an instance of <see cref="BitBucketApiClient"/>
+        /// Initializes an instance of <see cref="BitbucketApiClient"/>
         /// </summary>
-        public BitBucketApiClient()
+        public BitbucketApiClient()
         {
             httpClient.Timeout = new TimeSpan(0, 1, 0);
             httpClient.DefaultRequestHeaders.Add("Accept", "application/json");

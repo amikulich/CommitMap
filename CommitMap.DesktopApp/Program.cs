@@ -1,40 +1,39 @@
 ﻿using System;
-using System.Linq;
+using System.Diagnostics;
 
-using CommitMap.DataAccess;
-using CommitMap.Services;
-using CommitMap.Services.Changes;
-using CommitMap.Services.Semantics;
+using Autofac;
+
+using CommitMap.DI;
+using CommitMap.Services.Facade;
 
 namespace CommitMap.DesktopApp
 {
     class Program
     {
-        private static ICommitScanner _commitScanner = new CommitScanner(new BitBucketApiClient());
-
-        private static ISolutionProvider _solutionProvider = new SolutionProvider();
-
-        private static IAnalyzer analyzer = new Analyzer();
+        private static IContainer container { get; set; }
 
         static void Main(string[] args)
         {
-            var solution = _solutionProvider.GetSolution().Result;
+            Console.WriteLine("-------------------------------");
+            Console.WriteLine($"CommitMap execution started at: {DateTime.UtcNow.ToShortTimeString()}");
 
-            var modifiedDocumentsNames = _commitScanner.GetModifiedDocuments("2575aaf49418d86bae0e98a0f6a4613da0d6cfb6", "5f0fbaabbea1e9f7b1cf3caba568441ab3967684").Result;
+            var builder = new ContainerBuilder();
 
-            var documentsAffected = solution.Projects
-                .SelectMany(p => p.Documents.Where(doc => modifiedDocumentsNames.Contains(doc.Name)));
+            builder.RegisterModule<CommitMapDIModule>();
+            container = builder.Build();
 
-            var usages = analyzer.FindAllCallers(documentsAffected, solution).Result;
-
-            var endPoints = usages.Where(u => u.CallingSymbol.ContainingType.Name.EndsWith("Controller"));
-
-            Console.WriteLine("Results:");
-            int i = 1;
-            foreach (var endPoint in endPoints.Distinct(new SymbolCallerInfoEqualityComparer()))
+            var watch = Stopwatch.StartNew();
+            using (var scope = container.BeginLifetimeScope())
             {
-                Console.WriteLine($"{i++}. {endPoint.CallingSymbol}");
+                var app = scope.Resolve<ICommitMapEngine>();
+                app.Run();
             }
+            watch.Stop();
+
+            Console.WriteLine($"Execution finished at: {DateTime.UtcNow.ToShortTimeString()}");
+            Console.WriteLine($"Execution time: {watch.Elapsed.TotalSeconds} seconds");
+            Console.WriteLine("-------------------------------");
+            Console.ReadKey();
         }
     }
 }
