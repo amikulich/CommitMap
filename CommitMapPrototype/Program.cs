@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Linq;
+
+using CommitMap.DataAccess;
 using CommitMap.Services;
+using CommitMap.Services.Changes;
 using CommitMap.Services.Semantics;
 
 namespace CommitMapPrototype
 {
     class Program
     {
-        private static ICommitScanner _commitScanner = new CommitScanner();
+        private static ICommitScanner _commitScanner = new CommitScanner(new BitBucketApiClient());
 
         private static ISolutionProvider _solutionProvider = new SolutionProvider();
 
@@ -19,7 +22,7 @@ namespace CommitMapPrototype
 
             var modifiedDocumentsNames = _commitScanner.GetModifiedDocuments("somehash");
             var documentsAffected = solution.Projects
-                .SelectMany(p => p.Documents.Where(doc => modifiedDocumentsNames.Contains(doc.Name))); 
+                .SelectMany(p => p.Documents.Where(doc => modifiedDocumentsNames.Contains(doc.Name)));
 
             var usages = analyzer.FindAllCallers(documentsAffected, solution).Result;
 
@@ -32,5 +35,5 @@ namespace CommitMapPrototype
                 Console.WriteLine($"{i++}. {endPoint.CallingSymbol}");
             }
         }
-    }    
+    }
 }

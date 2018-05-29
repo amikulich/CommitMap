@@ -1,24 +1,32 @@
-﻿namespace CommitMap.Services
-{
-    public interface ICommitScanner
-    {
-        string[] GetModifiedDocuments(string commitHash);
-    }
+﻿using System.Linq;
+using System.Threading.Tasks;
 
+using CommitMap.Services.Changes.Bitbucket;
+
+namespace CommitMap.Services.Changes
+{
     public class CommitScanner : ICommitScanner
     {
-        public string[] GetModifiedDocuments(string commitHash)
+        private readonly IBitbucketApiClient _apiClient;
+
+        /// <summary>
+        /// Initializes an instance of <see cref="CommitScanner"/>
+        /// </summary>
+        public CommitScanner(IBitbucketApiClient apiClient)
         {
-            return new string[]
-            {
-                //"LaunchAllConfirmationReason.cs",
-                //"NameAndValue.cs",
-                "ICommentService.cs",
-                "SearchRequestData.cs",
-                //"DashboardFilterAppService.cs",
-                //"VDSPAttributeModel.cs",
-                //"Campaign.cs",
-            };
+            _apiClient = apiClient;
+        }
+
+        public async Task<string[]> GetModifiedDocuments(string fromCommit, string toCommit)
+        {
+            var url = new BitbucketCommitDiffUrl(fromCommit, toCommit);
+
+            var commitDiff = await _apiClient.Get<CommitDiffDto>(url);
+
+            return commitDiff
+                .Values
+                .Select(v => v.Document.Name)
+                .ToArray();
         }
     }
 }

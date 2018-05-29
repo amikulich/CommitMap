@@ -175,6 +175,10 @@
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CommitMap.DataAccess\CommitMap.DataAccess.csproj">
+      <Project>{0436D8E8-4B62-4FB8-86AB-D410BE2BE9AC}</Project>
+      <Name>CommitMap.DataAccess</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CommitMap.Services\CommitMap.Services.csproj">
       <Project>{6D41C1AF-8042-4A94-BACE-21CB1572F16D}</Project>
       <Name>CommitMap.Services</Name>
