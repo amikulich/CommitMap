@@ -19,11 +19,11 @@ namespace CommitMap.Services
 
             workspace.WorkspaceFailed += (sender, args) =>
             {
-                Console.WriteLine(args.Diagnostic.Message);
-                Console.WriteLine("-----------------------");
+                //Console.WriteLine(args.Diagnostic.Message);
+                //Console.WriteLine("-----------------------");
             };
 
-            return await workspace.OpenSolutionAsync("c:\\temp\\TestSol\\TestSol.sln");
+            return await workspace.OpenSolutionAsync("C:\\Videology2\\DSP-UI\\DSP\\Code\\DSP\\DSP.sln");
         }
     }
 }

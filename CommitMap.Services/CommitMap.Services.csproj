@@ -152,9 +152,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommitScanner.cs" />
+    <Compile Include="Semantics\SymbolCallerInfoExtensions.cs" />
+    <Compile Include="Changes\CommitScanner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SemanticAnalyzer.cs" />
+    <Compile Include="Semantics\Analyzer.cs" />
     <Compile Include="SolutionProvider.cs" />
   </ItemGroup>
   <ItemGroup>

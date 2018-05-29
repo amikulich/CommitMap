@@ -1,20 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.FindSymbols;
 
-namespace CommitMap.Services
+namespace CommitMap.Services.Semantics
 {
-    public interface ISemanticAnalyzer
+    public interface IAnalyzer
     {
         Task<SymbolCallerInfo[]> FindAllCallers(IEnumerable<Document> documentsAffected, Solution solution);
     }
 
-    public class SemanticAnalyzer : ISemanticAnalyzer
+    public class Analyzer : IAnalyzer
     {
+        public const byte MaxDepth = 10;
+
         public async Task<SymbolCallerInfo[]> FindAllCallers(IEnumerable<Document> documentsAffected,
             Solution solution)
         {
@@ -36,17 +39,24 @@ namespace CommitMap.Services
                 }
             }
 
-            return callers.Distinct().ToArray();
+            return callers.Distinct(new SymbolCallerInfoEqualityComparer()).ToArray();
         }
 
-        private async Task<IEnumerable<SymbolCallerInfo>> FindCallersRecursively(ISymbol symbol, Solution solution)
+        private async Task<IEnumerable<SymbolCallerInfo>> FindCallersRecursively(ISymbol symbol, Solution solution, int currentDepth = 0)
         {
             var callers = (await SymbolFinder.FindCallersAsync(symbol, solution)).ToList();
 
             var nestedCallers = new List<SymbolCallerInfo>();
             foreach (var symbolCallerInfo in callers)
             {
-                nestedCallers.AddRange(FindCallersRecursively(symbolCallerInfo.CallingSymbol, solution).Result);
+                if (currentDepth < MaxDepth)
+                {
+                    nestedCallers.AddRange(FindCallersRecursively(symbolCallerInfo.CallingSymbol, solution, ++currentDepth).Result);
+                }
+                else
+                {
+                    Console.WriteLine("Reached the recursion limit");
+                }
             }
 
             callers.AddRange(nestedCallers);

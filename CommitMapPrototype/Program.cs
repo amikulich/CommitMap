@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using CommitMap.Services;
-using Microsoft.CodeAnalysis.FindSymbols;
+using CommitMap.Services.Semantics;
 
 namespace CommitMapPrototype
 {
@@ -12,7 +11,7 @@ namespace CommitMapPrototype
 
         private static ISolutionProvider _solutionProvider = new SolutionProvider();
 
-        private static ISemanticAnalyzer _semanticAnalyzer = new SemanticAnalyzer();
+        private static IAnalyzer analyzer = new Analyzer();
 
         static void Main(string[] args)
         {
@@ -22,15 +21,16 @@ namespace CommitMapPrototype
             var documentsAffected = solution.Projects
                 .SelectMany(p => p.Documents.Where(doc => modifiedDocumentsNames.Contains(doc.Name))); 
 
-            var usages = _semanticAnalyzer.FindAllCallers(documentsAffected, solution).Result;
+            var usages = analyzer.FindAllCallers(documentsAffected, solution).Result;
 
             var endPoints = usages.Where(u => u.CallingSymbol.ContainingType.Name.EndsWith("Controller"));
 
             Console.WriteLine("Results:");
-            foreach (var endPoint in endPoints)
+            int i = 1;
+            foreach (var endPoint in endPoints.Distinct(new SymbolCallerInfoEqualityComparer()))
             {
-                Console.WriteLine(endPoint.CallingSymbol);
+                Console.WriteLine($"{i++}. {endPoint.CallingSymbol}");
             }
         }
-    }
+    }    
 }

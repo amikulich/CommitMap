@@ -11,7 +11,13 @@
         {
             return new string[]
             {
-                "SomeDto.cs",
+                //"LaunchAllConfirmationReason.cs",
+                //"NameAndValue.cs",
+                "ICommentService.cs",
+                "SearchRequestData.cs",
+                //"DashboardFilterAppService.cs",
+                //"VDSPAttributeModel.cs",
+                //"Campaign.cs",
             };
         }
     }
