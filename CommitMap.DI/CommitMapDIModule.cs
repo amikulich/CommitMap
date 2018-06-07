@@ -3,6 +3,7 @@
 using CommitMap.DataAccess;
 using CommitMap.Services;
 using CommitMap.Services.Changes;
+using CommitMap.Services.Changes.Bitbucket.Solution;
 using CommitMap.Services.Facade;
 using CommitMap.Services.Semantics;
 

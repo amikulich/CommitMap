@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -22,7 +23,7 @@ namespace CommitMap.DataAccess
         public BitbucketApiClient()
         {
             httpClient.Timeout = new TimeSpan(0, 1, 0);
-            httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+            //httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
 
             var authToken = ConfigurationManager.AppSettings["BitbucketAuthToken"];
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AuthorizationPrefix, authToken);
@@ -47,16 +48,29 @@ namespace CommitMap.DataAccess
                 }
                 catch (Exception e)
                 {
-                    var exception = new BitbucketIntegrationException("failed to extract info from Jira call", e);
+                    var exception = new BitbucketIntegrationException("failed to extract info from Bitbucket API call", e);
                     throw exception;
                 }
             }
 
-            var oasysIntegrationException = new BitbucketIntegrationException("Jira GET call failed");
+            var oasysIntegrationException = new BitbucketIntegrationException("Bitbucket API GET call failed");
 
             throw oasysIntegrationException;
         }
 
+        public async Task<Stream> LoadFile(string url)
+        {
+            var response = await httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
+
+            if (response.Content != null)
+            {
+                return await response.Content.ReadAsStreamAsync();
+            }
+
+            var oasysIntegrationException = new BitbucketIntegrationException("Bitbucket API GET call failed");
+
+            throw oasysIntegrationException;
+        }
 
         public void Dispose()
         {

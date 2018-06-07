@@ -4,6 +4,6 @@ namespace CommitMap.Services.Changes
 {
     public interface ICommitScanner
     {
-        Task<string[]> GetModifiedDocuments(string fromCommit, string toCommit);
+        Task<string[]> GetModifiedDocuments(string firstCommit, string lastCommit);
     }
 }

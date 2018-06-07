@@ -1,20 +1,20 @@
 ﻿using System.Configuration;
 
-namespace CommitMap.Services.Changes.Bitbucket
+namespace CommitMap.Services.Changes.Bitbucket.Urls
 {
-    public class BitbucketCommitDiffUrl
+    internal class BitbucketCommitDiffUrl
     {
-        public string FromCommit { get; }
+        public string FirstCommit { get; }
 
-        public string ToCommit { get; }
+        public string LastCommit { get; }
 
         /// <summary>
         /// Initializes an instance of <see cref="BitbucketCommitDiffUrl"/>
         /// </summary>
-        public BitbucketCommitDiffUrl(string fromCommit, string toCommit)
+        public BitbucketCommitDiffUrl(string firstCommit, string lastCommit)
         {
-            FromCommit = fromCommit;
-            ToCommit = toCommit;
+            FirstCommit = firstCommit;
+            LastCommit = lastCommit;
         }
 
         public override string ToString()
@@ -23,7 +23,7 @@ namespace CommitMap.Services.Changes.Bitbucket
             var projectName = ConfigurationManager.AppSettings["BitbucketProjectName"];
             var repoName = ConfigurationManager.AppSettings["BitbucketRepositoryName"];
 
-            return $"{url}/rest/api/1.0/projects/{projectName}/repos/{repoName}/compare/changes?&limit=1000&until=master&from={FromCommit}&to={ToCommit}";
+            return $"{url}/rest/api/1.0/projects/{projectName}/repos/{repoName}/compare/changes?&limit=1000&until=master&from={LastCommit}&to={FirstCommit}";
         }
 
         public static implicit operator string(BitbucketCommitDiffUrl url)

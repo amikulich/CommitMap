@@ -1,14 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 using CommitMap.Services.Changes;
+using CommitMap.Services.Changes.Bitbucket.Solution;
 using CommitMap.Services.Semantics;
 
 namespace CommitMap.Services.Facade
 {
     public interface ICommitMapEngine
     {
-        void Run();
+        Task<CommitMapRunResult> Run(string firstCommit, string lastCommit);
     }
 
     public class CommitMapEngine : ICommitMapEngine
@@ -29,25 +32,22 @@ namespace CommitMap.Services.Facade
             _analyzer = analyzer;
         }
 
-        public void Run()
+        public async Task<CommitMapRunResult> Run(string firstCommit, string lastCommit)
         {
-            var solution = _solutionProvider.GetSolution().Result;
+            var solution = await _solutionProvider.GetSolution();
 
-            var modifiedDocumentsNames = _commitScanner.GetModifiedDocuments("2575aaf49418d86bae0e98a0f6a4613da0d6cfb6", "5f0fbaabbea1e9f7b1cf3caba568441ab3967684").Result;
+            var modifiedDocumentsNames = await _commitScanner.GetModifiedDocuments(firstCommit, lastCommit);
 
             var documentsAffected = solution.Projects
                 .SelectMany(p => p.Documents.Where(doc => modifiedDocumentsNames.Contains(doc.Name)));
 
-            var usages = _analyzer.FindAllCallers(documentsAffected, solution).Result;
+            var usages = await _analyzer.FindAffectedEndpoints(documentsAffected, solution);
 
-            var endPoints = usages.Where(u => u.CallingSymbol.ContainingType.Name.EndsWith("Controller"));
-
-            Console.WriteLine("Results:");
-            int i = 1;
-            foreach (var endPoint in endPoints.Distinct(new SymbolCallerInfoEqualityComparer()))
-            {
-                Console.WriteLine($"{i++}. {endPoint.CallingSymbol}");
-            }
+            return new CommitMapRunResult()
+                       {
+                           CompletedAt = DateTime.UtcNow,
+                           Controllers = usages.ToArray(),
+            };
         }
     }
 }

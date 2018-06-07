@@ -90,6 +90,7 @@
       <HintPath>..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.IO.FileSystem, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IO.FileSystem.4.3.0\lib\net46\System.IO.FileSystem.dll</HintPath>
     </Reference>
@@ -159,19 +160,27 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Changes\Bitbucket\BitbucketCommitDiffUrl.cs" />
+    <Compile Include="Changes\Bitbucket\Solution\ArchiveExtensions.cs" />
+    <Compile Include="Changes\Bitbucket\Solution\ArchiveFilePath.cs" />
+    <Compile Include="Changes\Bitbucket\Solution\RepositoryFolderPath.cs" />
+    <Compile Include="Changes\Bitbucket\Urls\BitbucketCommitDiffUrl.cs" />
     <Compile Include="Changes\Bitbucket\BitbucketIntegrationException.cs" />
     <Compile Include="Changes\Bitbucket\CommitDiffComponentDto.cs" />
     <Compile Include="Changes\Bitbucket\CommitDiffDto.cs" />
     <Compile Include="Changes\Bitbucket\CommitDiffValueDto.cs" />
     <Compile Include="Changes\Bitbucket\IBitbucketApiClient.cs" />
+    <Compile Include="Changes\Bitbucket\Urls\BitbucketDownloadRepoArchiveUrl.cs" />
     <Compile Include="Changes\ICommitScanner.cs" />
+    <Compile Include="Facade\CMSolutionProviderConfiguration.cs" />
     <Compile Include="Facade\CommitMapEngine.cs" />
+    <Compile Include="Facade\CommitMapRunResult.cs" />
+    <Compile Include="Semantics\AnalyzerOutput.cs" />
+    <Compile Include="Semantics\ReferenceLocationExtensions.cs" />
     <Compile Include="Semantics\SymbolCallerInfoExtensions.cs" />
     <Compile Include="Changes\CommitScanner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Semantics\Analyzer.cs" />
-    <Compile Include="SolutionProvider.cs" />
+    <Compile Include="Changes\Bitbucket\Solution\SolutionProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

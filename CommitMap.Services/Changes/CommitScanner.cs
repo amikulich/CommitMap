@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 
 using CommitMap.Services.Changes.Bitbucket;
+using CommitMap.Services.Changes.Bitbucket.Urls;
 
 namespace CommitMap.Services.Changes
 {
@@ -17,9 +18,9 @@ namespace CommitMap.Services.Changes
             _apiClient = apiClient;
         }
 
-        public async Task<string[]> GetModifiedDocuments(string fromCommit, string toCommit)
+        public async Task<string[]> GetModifiedDocuments(string firstCommit, string lastCommit)
         {
-            var url = new BitbucketCommitDiffUrl(fromCommit, toCommit);
+            var url = new BitbucketCommitDiffUrl(firstCommit, lastCommit);
 
             var commitDiff = await _apiClient.Get<CommitDiffDto>(url);
 
