@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -38,8 +37,8 @@ namespace CommitMap.Services.Facade
 
             var modifiedDocumentsNames = await _commitScanner.GetModifiedDocuments(firstCommit, lastCommit);
 
-            var documentsAffected = solution.Projects
-                .SelectMany(p => p.Documents.Where(doc => modifiedDocumentsNames.Contains(doc.Name)));
+            var documentsAffected = solution.Projects.SelectMany(p => p.Documents)
+                .Where(doc => modifiedDocumentsNames.Any(m => doc.FilePath.Contains(m)));
 
             var usages = await _analyzer.FindAffectedEndpoints(documentsAffected, solution);
 

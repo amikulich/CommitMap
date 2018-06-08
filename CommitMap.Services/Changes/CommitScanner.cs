@@ -26,7 +26,7 @@ namespace CommitMap.Services.Changes
 
             return commitDiff
                 .Values
-                .Select(v => v.Document.Name)
+                .Select(v => v.Document.FullPath.Replace("/", "\\"))
                 .ToArray();
         }
     }

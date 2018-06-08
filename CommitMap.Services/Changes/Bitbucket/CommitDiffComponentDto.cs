@@ -9,5 +9,9 @@ namespace CommitMap.Services.Changes.Bitbucket
 
         [JsonProperty("name", Required = Required.Always)]
         public string Name { get; set; }
+
+        [JsonProperty("toString", Required = Required.Always)]
+        public string FullPath { get; set; }
+
     }
 }
