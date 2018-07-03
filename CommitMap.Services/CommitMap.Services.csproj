@@ -173,8 +173,8 @@
     <Compile Include="Changes\ICommitScanner.cs" />
     <Compile Include="Facade\CMSolutionProviderConfiguration.cs" />
     <Compile Include="Facade\CommitMapEngine.cs" />
-    <Compile Include="Facade\CommitMapRunResult.cs" />
-    <Compile Include="Semantics\AnalyzerOutput.cs" />
+    <Compile Include="Facade\AnalysisResult.cs" />
+    <Compile Include="Facade\Usage.cs" />
     <Compile Include="Semantics\ReferenceLocationExtensions.cs" />
     <Compile Include="Semantics\SymbolCallerInfoExtensions.cs" />
     <Compile Include="Changes\CommitScanner.cs" />

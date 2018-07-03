@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
-
+using System.Linq;
 using CommitMap.Services.Facade;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.FindSymbols;
 
 namespace CommitMap.Services.Semantics
@@ -11,16 +13,31 @@ namespace CommitMap.Services.Semantics
     {
         public static Endpoint ToEndpoint(this SymbolCallerInfo symbolCallerInfo)
         {
-            var callingSymbol = symbolCallerInfo.CallingSymbol;
+            var action = symbolCallerInfo.CallingSymbol;
+
+            var attribute = action
+                    .GetAttributes()
+                    .FirstOrDefault(a => a.AttributeClass.Name == "Usage");
+
+            string url = string.Empty, method = string.Empty;
+            if (attribute != null)
+            {
+                var parameters = attribute.ApplicationSyntaxReference.GetSyntax()
+                    .DescendantNodes()
+                    .Where(n => n is AttributeArgumentSyntax)
+                    .ToArray();
+
+                url = parameters[0].ToString();
+                method = parameters[1].ToString();
+            }
+
             return new Endpoint()
                        {
-                           Name = callingSymbol.ContainingType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat),
-                           Method = new Method()
-                                        {
-                                            Name = callingSymbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat),
-                                            Params = new Parameter[0]
-                                        },
-                           Caller = symbolCallerInfo.CalledSymbol.ToDisplayString()
+                           Url = url,
+                           HttpMethod = method,
+                           Controller = action.ContainingType.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat),
+                           Method = action.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat),
+                           Namespace = action.ContainingSymbol.ContainingNamespace.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat)
                        };
         }
     }

@@ -45,7 +45,7 @@ namespace CommitMap.DesktopApp
             
             var watch = Stopwatch.StartNew();
 
-            CommitMapRunResult result;
+            AnalysisResult result;
             using (var scope = container.BeginLifetimeScope())
             {
                 var app = scope.Resolve<ICommitMapEngine>();
@@ -53,7 +53,7 @@ namespace CommitMap.DesktopApp
             }
             watch.Stop();
 
-            foreach (var controller in result.Controllers)
+            foreach (var controller in result.AffectedEndpoints)
             {
                 Console.WriteLine(controller.ToString());
             }

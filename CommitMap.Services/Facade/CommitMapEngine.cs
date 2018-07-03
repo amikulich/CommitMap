@@ -11,7 +11,7 @@ namespace CommitMap.Services.Facade
 {
     public interface ICommitMapEngine
     {
-        Task<CommitMapRunResult> Run(string firstCommit, string lastCommit);
+        Task<AnalysisResult> Run(string firstCommit, string lastCommit);
     }
 
     public class CommitMapEngine : ICommitMapEngine
@@ -32,7 +32,7 @@ namespace CommitMap.Services.Facade
             _analyzer = analyzer;
         }
 
-        public async Task<CommitMapRunResult> Run(string firstCommit, string lastCommit)
+        public async Task<AnalysisResult> Run(string firstCommit, string lastCommit)
         {
             var solution = await _solutionProvider.GetSolution();
 
@@ -43,10 +43,10 @@ namespace CommitMap.Services.Facade
 
             var usages = await _analyzer.FindAffectedEndpoints(documentsAffected, solution);
 
-            return new CommitMapRunResult()
+            return new AnalysisResult()
                        {
                            CompletedAt = DateTime.UtcNow,
-                           Controllers = usages.ToArray(),
+                           AffectedEndpoints = usages.ToArray(),
             };
         }
     }
