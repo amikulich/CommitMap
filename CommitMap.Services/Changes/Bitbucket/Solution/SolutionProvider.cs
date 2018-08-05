@@ -59,8 +59,8 @@ namespace CommitMap.Services.Changes.Bitbucket.Solution
 
             workspace.WorkspaceFailed += (sender, args) =>
                 {
-                    //Console.WriteLine(args.Diagnostic.Message);
-                    //Console.WriteLine("-----------------------");
+                    Console.WriteLine(args.Diagnostic.Message);
+                    Console.WriteLine("-----------------------");
                 };
 
             return await workspace.OpenSolutionAsync(solutionPath);

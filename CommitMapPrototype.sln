@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitMap.DataAccess", "Com
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitMap.DI", "CommitMap.DI\CommitMap.DI.csproj", "{094EBFDF-3083-448F-8E9D-1F8BF6A71F48}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Analyzer.Api", "Analyzer.Api\Analyzer.Api.csproj", "{FD8526B5-D415-4042-9001-FFB081EFC8A9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{094EBFDF-3083-448F-8E9D-1F8BF6A71F48}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{094EBFDF-3083-448F-8E9D-1F8BF6A71F48}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{094EBFDF-3083-448F-8E9D-1F8BF6A71F48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD8526B5-D415-4042-9001-FFB081EFC8A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD8526B5-D415-4042-9001-FFB081EFC8A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD8526B5-D415-4042-9001-FFB081EFC8A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD8526B5-D415-4042-9001-FFB081EFC8A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
