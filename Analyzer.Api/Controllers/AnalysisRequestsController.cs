@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Analyzer.Api.Models;
 using CommitMap.Services.Facade;
 
 namespace Analyzer.Api.Controllers
@@ -14,20 +16,20 @@ namespace Analyzer.Api.Controllers
             _engine = engine;
         }
 
-        public async Task Post()
+        [HttpPost]
+        public async Task<IHttpActionResult> Post([FromBody] AnalysisRequestModel model)
         {
-            try
+            if (model == null)
             {
-                await Task.Factory.StartNew(async () =>
-                {
-                    await _engine.Run("", "");
-                });
+                return BadRequest("Analysis request model is missing");
             }
-            catch (Exception e)
+
+            await Task.Factory.StartNew(async () =>
             {
-                Console.WriteLine(e);
-                throw;
-            }
+                await _engine.Run(model.From, model.To);
+            });
+
+            return Ok();
         }
     }
 }
