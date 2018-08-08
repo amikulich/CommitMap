@@ -20,14 +20,14 @@ namespace CommitMap.Services.Changes
 
         public async Task<string[]> GetModifiedDocuments(string firstCommit, string lastCommit)
         {
-            //var url = new BitbucketCommitDiffUrl(firstCommit, lastCommit);
+            var url = new BitbucketCommitDiffUrl(firstCommit, lastCommit);
 
-            //var commitDiff = await _apiClient.Get<CommitDiffDto>(url);
-            return await Task.Factory.StartNew(() => { return new[] { "DSP-UI\\DSP\\Code\\DSP\\CE\\CampaignEngine.Api.Services\\Public\\Demand\\Plans\\PlanAccountManagerService.cs"}; });
-            //return commitDiff
-            //    .Values
-            //    .Select(v => v.Document.FullPath.Replace("/", "\\"))
-            //    .ToArray();
+            var commitDiff = await _apiClient.Get<CommitDiffDto>(url);
+            
+            return commitDiff
+                .Values
+                .Select(v => v.Document.FullPath.Replace("/", "\\"))
+                .ToArray();
         }
     }
 }

@@ -1,10 +1,10 @@
 ﻿using Autofac;
 
 using CommitMap.DataAccess;
-using CommitMap.Services;
 using CommitMap.Services.Changes;
 using CommitMap.Services.Changes.Bitbucket.Solution;
 using CommitMap.Services.Facade;
+using CommitMap.Services.Integration;
 using CommitMap.Services.Semantics;
 
 namespace CommitMap.DI
@@ -14,6 +14,10 @@ namespace CommitMap.DI
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<BitbucketApiClient>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<AnalysisResultsApiClient>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
 

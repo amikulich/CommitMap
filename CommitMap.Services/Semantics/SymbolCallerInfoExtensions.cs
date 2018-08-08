@@ -20,15 +20,17 @@ namespace CommitMap.Services.Semantics
                     .FirstOrDefault(a => a.AttributeClass.Name == "Usage");
 
             string url = string.Empty, method = string.Empty;
-            if (attribute != null)
+
+            var isLabeledWithAttribute = attribute != null;
+            if (isLabeledWithAttribute)
             {
                 var parameters = attribute.ApplicationSyntaxReference.GetSyntax()
                     .DescendantNodes()
                     .Where(n => n is AttributeArgumentSyntax)
                     .ToArray();
 
-                url = parameters[0].ToString();
-                method = parameters[1].ToString();
+                url = parameters[0].ToString().Replace("\"", "");
+                method = parameters[1].ToString().Replace("\"", "");
             }
 
             return new Endpoint()
@@ -37,7 +39,8 @@ namespace CommitMap.Services.Semantics
                            HttpMethod = method,
                            Controller = action.ContainingType.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat),
                            Method = action.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat),
-                           Namespace = action.ContainingSymbol.ContainingNamespace.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat)
+                           Namespace = action.ContainingSymbol.ContainingNamespace.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat),
+                           IsLabelled = isLabeledWithAttribute
                        };
         }
     }

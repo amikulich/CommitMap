@@ -175,6 +175,7 @@
     <Compile Include="Facade\CommitMapEngine.cs" />
     <Compile Include="Facade\AnalysisResult.cs" />
     <Compile Include="Facade\Usage.cs" />
+    <Compile Include="Integration\AnalysisResultsApiClient.cs" />
     <Compile Include="Semantics\ReferenceLocationExtensions.cs" />
     <Compile Include="Semantics\SymbolCallerInfoExtensions.cs" />
     <Compile Include="Changes\CommitScanner.cs" />

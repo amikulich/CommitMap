@@ -67,7 +67,7 @@ namespace CommitMap.Services.Semantics
             return callers
                 .Distinct(new SymbolCallerInfoEqualityComparer())
                 .Where(u => u.CallingSymbol.ContainingType.Name.EndsWith("Controller"))
-                .Select(c => c.ToEndpoint());
+                .Select(c => c.ToEndpoint().WithAppName("CE API"));
         }
 
         private async Task<IEnumerable<ReferenceLocation>> ProcessClass(ISymbol symbol, Solution solution)
